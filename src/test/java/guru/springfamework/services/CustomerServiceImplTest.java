@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class CustomerServiceImplTest {
 
@@ -31,10 +31,10 @@ public class CustomerServiceImplTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        customerService=new CustomerServiceImpl();
-        customerService.setCustomerMapper(customerMapper);
-        customerService.setCustomerRepository(customerRepository);
-        // customerService = new CustomerServiceImpl(customerMapper, customerRepository);
+        //customerService=new CustomerServiceImpl();
+        //customerService.setCustomerMapper(customerMapper);
+        //customerService.setCustomerRepository(customerRepository);
+        customerService = new CustomerServiceImpl(customerMapper, customerRepository);
     }
 
     @Test
@@ -96,5 +96,35 @@ public class CustomerServiceImplTest {
         //then
         assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
         assertEquals("/api/v1/customer/1", savedDto.getCustomerUrl());
+    }
+
+    @Test
+    public void saveCustomerByDTO() throws Exception {
+
+        //given
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstname("Jim");
+
+        Customer savedCustomer = new Customer();
+        savedCustomer.setFirstname(customerDTO.getFirstname());
+        savedCustomer.setLastname(customerDTO.getLastname());
+        savedCustomer.setId(1L);
+
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+        // when
+        CustomerDTO savedDTO = customerService.saveCustomerByDTO(1L, customerDTO);
+
+        //then
+        assertEquals(customerDTO.getFirstname(), savedDTO.getFirstname());
+        assertEquals("/api/v1/customer/1", savedDTO.getCustomerUrl());
+    }
+
+    @Test
+    public void deleteCustomerById() throws Exception {
+        Long id = 1L;
+        customerRepository.deleteById(id);
+
+        verify(customerRepository, times(1)).deleteById(anyLong());
     }
 }

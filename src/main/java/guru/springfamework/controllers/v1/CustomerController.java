@@ -38,4 +38,20 @@ public class CustomerController {
         return new ResponseEntity<CustomerDTO>(customerService.createNewCustomer(customerDTO), HttpStatus.CREATED);
 
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO){
+        return new ResponseEntity<CustomerDTO>(customerService.saveCustomerByDTO(id, customerDTO), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}") //the difference between patch and put is that patch allows you to update just one value of the object, and put updates everything
+    public ResponseEntity<CustomerDTO> patchCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO){
+        return new ResponseEntity<CustomerDTO>(customerService.patchCustomer(id, customerDTO), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id){
+        customerService.deleteCustomerById(id);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
 }
