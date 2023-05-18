@@ -2,8 +2,10 @@ package guru.springfamework.bootstap;
 
 import guru.springfamework.domain.Category;
 import guru.springfamework.domain.Customer;
+import guru.springfamework.domain.Vendor;
 import guru.springfamework.repositories.CategoryRepository;
 import guru.springfamework.repositories.CustomerRepository;
+import guru.springfamework.repositories.VendorRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -12,13 +14,13 @@ public class Bootstrap implements CommandLineRunner {
 
     private final CategoryRepository categoryRespository;
     private final CustomerRepository customerRepository;
+    private final VendorRepository vendorRepository;
 
-    public Bootstrap(CategoryRepository categoryRespository, CustomerRepository customerRepository) {
+    public Bootstrap(CategoryRepository categoryRespository, CustomerRepository customerRepository, VendorRepository vendorRepository) {
         this.categoryRespository = categoryRespository;
         this.customerRepository = customerRepository;
+        this.vendorRepository = vendorRepository;
     }
-
-
 
     //CommandLineRunner interface will make the classes that implement it, run at the beginning of intilization. The arguments
     // that will be passed to this run method are the same as the ones in the JVM
@@ -27,6 +29,7 @@ public class Bootstrap implements CommandLineRunner {
 
         loadCategories();
         loadCustomers();
+        loadVendors();
     }
 
     private void loadCategories() {
@@ -71,4 +74,20 @@ public class Bootstrap implements CommandLineRunner {
 
         System.out.println("Customers Loaded: " + customerRepository.count());
     }
+
+    private void loadVendors() {
+        //given
+        Vendor vendor1 = new Vendor();
+        vendor1.setId(1L);
+        vendor1.setName("Western Tasty Fruits");
+        vendorRepository.save(vendor1);
+
+        Vendor vendor2 = new Vendor();
+        vendor2.setId(2L);
+        vendor2.setName("Exotic Fruits Company");
+        vendorRepository.save(vendor2);
+
+        System.out.println("Vendors Loaded: " + vendorRepository.count());
+    }
+
 }
