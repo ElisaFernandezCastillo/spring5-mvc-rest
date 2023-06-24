@@ -1,7 +1,6 @@
 package guru.springfamework.controllers.v1;
 
 import guru.springfamework.api.v1.model.VendorDTO;
-import guru.springfamework.services.CustomerService;
 import guru.springfamework.services.VendorService;
 import org.junit.Before;
 import org.junit.Test;
